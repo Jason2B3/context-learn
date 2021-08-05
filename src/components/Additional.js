@@ -1,12 +1,12 @@
-import React, {useContext} from 'react'
-import { CounterContext } from '../contexts/CounterContext'
+import React from 'react'
+import { useCounter } from "../contexts/CounterContext";
 function Additional() {
-  const { increaseCount} = useContext(CounterContext);
+  const { increaseCount } = useCounter();
   return (
     <React.Fragment>
       <button onClick={increaseCount}>Additional</button>
     </React.Fragment>
-  )
+  );
 }
 
-export default Additional
+export default Additional;
