@@ -1,15 +1,21 @@
 import "./App.css";
 
 import ActivateSight from "./ActivateSight";
-import MyCounter from "./components/MyCounter";
+import Counter from "./components/Counter";
+import CounterContextProvider from "./contexts/CounterContext";
 
 function App() {
+  function add1(){
+    console.log(9)
+   }
+   let obj={add1}
+   console.log(obj)
   return (
-    <div className="App">
+    <CounterContextProvider>
       <h1>Context API</h1>
-      <MyCounter/>
-      <ActivateSight />
-    </div>
+      <Counter/>
+      {/* <ActivateSight /> */}
+    </CounterContextProvider>
   );
 }
 
