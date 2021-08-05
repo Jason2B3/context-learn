@@ -1,15 +1,13 @@
-import logo from "./logo.svg";
 import "./App.css";
-import ComponentA from "./components/ComponentA";
-import ComponentB from "./components/ComponentB";
+
 import ActivateSight from "./ActivateSight";
+import MyCounter from "./components/MyCounter";
 
 function App() {
   return (
     <div className="App">
       <h1>Context API</h1>
-      <ComponentA />
-      <ComponentB />
+      <MyCounter/>
       <ActivateSight />
     </div>
   );
