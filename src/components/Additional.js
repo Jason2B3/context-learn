@@ -1,12 +1,8 @@
 import React from 'react'
-import { useCounter } from "../contexts/CounterContext";
-function Additional() {
-  const { increaseCount } = useCounter();
-  return (
-    <React.Fragment>
-      <button onClick={increaseCount}>Additional</button>
-    </React.Fragment>
-  );
+
+function Additional(props) {
+  return (<button onClick={props.handler}>{props.text}</button>);
 }
 
 export default Additional;
+
