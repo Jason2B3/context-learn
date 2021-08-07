@@ -3,9 +3,9 @@ import { useCounter } from "../contexts/CounterContext";
 import Additional from "./Additional";
 
 function Counter() {
-  // Bring in all the shared variables fro, CounterContext.ks
-  const { count, increaseCount, decreaseCount } = useCounter();
-  const handlerA = () => alert("Handler A works");
+  //~ Bring in all the shared variables fro, CounterContext.js
+  const { counter_js } = useCounter();
+  const {count, increaseCount, decreaseCount} = counter_js
   return (
     <React.Fragment>
       <h3>Counter Component</h3>
