@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useReducer, useRef, useEffect } from "react";
 import MyInput from "./components/MyInput";
 import "./App.css";
 
@@ -23,18 +23,24 @@ function formReducer(state, action) {
       passwordIsValid: currentVal.trim().length >= 2,
     };
   }
-
   // Check if state.emailIsValid and state.passwordIsValid are both true.
   // If so, set formIsValid to true, and vice versa
   if (action.type === "CHECK_FORM") {
-    // Check if the fields are empty first (we start them off as valid for coloring purposes)
+    //$ Check if the fields are empty first (we start them off as valid for coloring purposes)
     const emptyEmail = state.emailInput.trim().length === 0;
     const emptyPassword = state.passwordInput.trim().length === 0;
     if (emptyEmail || emptyPassword) return { ...state, formIsValid: false };
-    // Check if they are legitimate after we know the values aren't ""
-    const bothValidLegit = state.emailIsValid && state.passwordIsValid;
-    if (bothValidLegit) alert("Login Complete");
-    return { ...state, formIsValid: bothValidLegit };
+    //$ Check field validities after we know the values aren't "" (empty)
+    if (state.emailIsValid && state.passwordIsValid) {
+      alert("Login Complete");
+      return { ...state, formIsValid: true };
+    } else if (!state.emailIsValid) {
+      action.payload.emailInputRef.current.focusField(); // focus email if it's invalid (priority #1)
+      return { ...state, formIsValid: false };
+    } else if (!state.passwordIsValid) {
+      action.payload.passwordInputRef.current.focusField(); // focus password if it's invalid (priority #2)
+      return { ...state, formIsValid: false };
+    }
   }
   // If action.type is different than the above two options, return state as is
   return state;
@@ -58,12 +64,23 @@ function App(props) {
     //~ We set the input fields as valid initially so we don't color them red on startup
     //~ Made it so we can't submit successfully when nothing's typed though
   });
+  //~ Refs (forwarded to each instance MyInput) ----------------------
+  const emailInputRef = useRef();
+  const passwordInputRef = useRef();
+
+  //% forwardRef API use 1/2: focus email field on startup
+  useEffect(() => {
+    emailInputRef.current.focusField();
+  }, []); // runs on startup only thanks to the empty array arg
 
   //~ ---------------------- Handler Zone -------------------------------
   //@ On submit, check the form's validity (via formReducer)
   const submitHandler = function (e) {
     e.preventDefault();
-    formDispatch({ type: "CHECK_FORM" });
+    formDispatch({
+      type: "CHECK_FORM",
+      payload: { emailInputRef, passwordInputRef },
+    });
   };
   //@ After the field is typed in, update our email's state value
   const emailHandler = function (e) {
@@ -81,12 +98,14 @@ function App(props) {
     <form>
       <h3>Enter Email and Password</h3>
       <MyInput
+        ref={emailInputRef}
         value={formState.emailInput}
         onChange={emailHandler}
         placeholder={"Enter email..."}
         className={formState.emailIsValid ? "" : "invalid"}
       />
       <MyInput
+        ref={passwordInputRef}
         value={formState.passwordInput}
         onChange={passwordHandler}
         placeholder={"Enter password..."}
