@@ -1,8 +1,5 @@
-// CounterContext.js
-
 // Import your required hooks
-import { useState, createContext, useContext } from "react";
-// Create and export your custom hook
+import { createContext, useContext, useState } from "react";
 const CounterContext = createContext();
 export const useCounter = () => useContext(CounterContext) 
 
